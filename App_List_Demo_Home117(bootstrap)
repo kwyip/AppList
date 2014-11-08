@@ -1,0 +1,294 @@
+<!--Ka 11/7/2014-->
+<!--REQUIRE AngularJS, FontAwesome3.2 and 4-->
+<div class="navbar navbar-inverse navbar-fixed-top" data-spy="affix" data-offset-top="1000">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span>
+ <span class="icon-bar"></span>
+ <span class="icon-bar"></span>
+
+            </button> <a class="navbar-brand" href="#">StephanWolf Solutions</a>
+
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a class="" href="#">Home</a>
+                </li>
+                <li><a class="" href="#about">About</a>
+                </li>
+                <li><a class="" href="#apps">AppList</a>
+                </li>
+                <li><a class="" href="#contact">Contact</a>
+                </li>
+                <li><a href="#loginModal" role="button" data-toggle="modal">Login</a>
+                </li>
+            </ul>
+        </div>
+        <form class="navbar-search pull-center">
+            <input class="form-control" placeholder="Search For Apps/Filter Apps..." type="text">
+        </form>
+    </div>
+</div>
+
+<div class="page-header">
+</div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <h1>Welcome to your new site, AppList!</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2 col-md-offset-2 text-center">
+        <div class="featurette-item">
+          <i class="fa fa-search"></i>
+          <h4>Browse</h4>
+          <p>Browse apps from different app stores.</p>
+        </div>
+      </div>
+      <div class="col-md-2 text-center">
+        <div class="featurette-item">
+          <i class="icon-magnet"></i>
+          <h4>Compare</h4>
+          <p>Compare apps features, price, etc.</p>
+        </div>
+      </div>
+      <div class="col-md-2 text-center">
+        <div class="featurette-item">
+          <i class="icon-shield"></i>
+          <h4>Purchase</h4>
+          <p>Buy it.</p>
+        </div>
+      </div>
+      <div class="col-md-2 text-center">
+        <div class="featurette-item">
+          <i class="fa fa-comments"></i>
+          <h4>Discuss</h4>
+          <p>Discuss each app and submit your request.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--about page-->
+<div id="about" class="blurb">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <h1>What we do</h1>
+        <p class="lead">
+        The amount of applications, both web and mobile, is growing at an incredible 
+rate. Many platforms have their own “stores”, like the Apple store, Chrome Web 
+Store, or Google Play. These are useful when you know exactly what you are 
+looking for and for what device. However, there is no single location for both 
+application users and developers to browse through, compare, purchase, and 
+discuss applications. For example, if I wanted to contribute to the “Alarm Clock 
+App” domain by creating a new application and wanted to see all “Alarm Clock” 
+applications in existence, it would be very onerous to amalgamate all that 
+information. 
+In this project, we will be creating a web-site based (accessible from either 
+desktop or mobile app) repository of applications. So, it can be viewed as a 
+catalogue of applications that is sortable based on different criteria. In addition, 
+users of our catalogue should be able to be able to be redirected to the respective 
+application home pages to purchase the respective applications. 
+The Meta-App is different from platform-specific stores in that it provides more 
+information, includes user discussions, is user-driven, and allows cross-platform 
+comparison. 
+
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Applisttablepage-->
+<div class="listofapps" id="apps">
+<div class="container" ng-app="">
+
+  <div ng-controller="initApp">
+    
+    <div class="input-group add-on">
+      <input type="text" class="form-control  search-query" ng-model="query" ng-change="search()" placeholder="Search (App Name, Case Sensitive)">
+      <div class="input-group-btn">
+        <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+      </div>
+    </div>
+
+    <table class="table table-striped table-hover">
+      <tbody><tr>
+        <th class="appName"><a ng-click="sort_by('appName')">App Name <i class="fa fa-sort"></i></a></th>
+        <th class="developers"><a ng-click="sort_by('developers')">Developer(s) <i class="fa fa-sort"></i></a></th>
+        <th class="description" title="non-sortable">Description</th>
+        <th class="field3"><a ng-click="sort_by('field3')">Link <i class="fa fa-sort"></i></a></th>
+        <th class="field4"><a ng-click="sort_by('field4')">Price <i class="fa fa-sort"></i></a></th>
+        <th class="field5"><a ng-click="sort_by('field5')">Score <i class="fa fa-sort"></i></a></th>
+        <th class="action" title="action">Action</th>
+      </tr>
+      </tbody>
+      <tfoot>
+        <tr><td colspan="9">
+          <div class="text-center">
+            <ul class="pagination">
+              <li ng-class="{disabled: currentPage == 0}">
+                <a href="#" ng-click="prevPage()">« Prev</a>
+              </li>
+              <li ng-repeat="n in range(pagedItems.length)" ng-class="{active: n == currentPage}" ng-click="setPage()">
+                <a href="#" ng-bind="n + 1">1</a>
+              </li>
+              <li ng-class="{disabled: currentPage == pagedItems.length - 1}">
+                <a href="#" ng-click="nextPage()">Next »</a>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr></tfoot>
+      <tbody>
+        <tr ng-repeat="item in pagedItems[currentPage] | orderBy:sortingOrder:reverse">
+          <td>{{item.appName}}</td>
+          <td>{{item.developers}}</td>
+          <td>{{item.description}}</td>
+          <td><a href="#">{{item.field3}}</a></td>
+          <td>{{item.field4}}</td>
+          <td>{{item.field5}}</td>
+          <td><div class="btn-group">
+            <button data-toggle="dropdown" class="btn btn-xs dropdown-toggle" data-original-title="" title="">
+              Action 
+              <span class="caret">
+              </span>
+            </button>
+            <ul class="dropdown-menu pull-right">
+              <li>
+                <a href="#">Buy down</a>
+              </li>
+              <li>
+                <a href="#">Add to chart</a>
+              </li>
+            </ul>
+          </div>
+          </td>
+        </tr>
+       
+
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!--Contact page-->
+<div id="contact" class="blurb">  
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3 text-center">
+        <h1>Contact us:</h1>
+        <ul class="list-inline">
+          <li><i class="icon-facebook icon-2x"></i></li>
+          <li><i class="icon-twitter icon-2x"></i></li>
+          <li><i class="icon-google-plus icon-2x"></i></li>
+          <li><i class="icon-pinterest icon-2x"></i></li>
+        </ul>
+        
+      </div>
+    </div>
+  </div>
+</div>  
+
+
+<!--Panel-->
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="panel-title">
+            <i class="glyphicon glyphicon-wrench pull-right"></i>
+            <h4>Submit Request</h4>
+          </div>
+        </div>
+        <div class="panel-body">
+          
+          <form class="form form-vertical">
+            <div class="control-group">
+              <label>Email</label>
+              <div class="controls">
+                <input type="text" class="form-control" placeholder="Enter Email">
+              </div>
+            </div>
+            
+            <div class="control-group">
+              <label>Password</label>
+              <div class="controls">
+                <input type="password" class="form-control" placeholder="Password">
+                
+              </div>
+            </div>   
+            <div class="control-group">
+              <label>Details</label>
+              <div class="controls">
+                <textarea class="form-control"></textarea>
+              </div>
+            </div> 
+            <div class="control-group">
+              <label>Select</label>
+              <div class="controls">
+                <select class="form-control"><option>Apps Suggestions</option><option>Billing Question</option></select>
+              </div>
+            </div>    
+            <div class="control-group">
+              <label></label>
+              <div class="controls">
+                <button type="submit" class="btn btn-primary">
+                  Submit
+                </button>
+              </div>
+            </div>   
+            
+          </form>
+          
+          
+        </div><!--/panel content-->
+      </div><!--/panel-->
+
+
+
+
+<div id="push"></div>
+
+<!--Scrolling-->
+<ul class="nav pull-right scroll-down">
+  <li><a href="#" title="Scroll down"><i class="icon-chevron-down icon-8x"></i></a></li>
+</ul>
+<ul class="nav pull-right scroll-top">
+  <li><a href="#" title="Scroll to top"><i class="icon-chevron-up icon-8x"></i></a></li>
+</ul>
+
+
+<!--login modal-->
+<div id="loginModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+  <div class="modal-content">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h2 class="text-center"><img src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" class="img-circle"><br>Login</h2>
+      </div>
+      <div class="modal-body">
+          <form class="form col-md-12 center-block">
+            <div class="form-group">
+              <input type="text" class="form-control input-lg" placeholder="Email">
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control input-lg" placeholder="Password">
+            </div>
+            <div class="form-group">
+              <button class="btn btn-primary btn-lg btn-block">Sign In</button>
+              <span class="pull-right"><a href="#">Register</a></span><span><a href="#">Need help?</a></span>
+            </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+          <div class="col-md-12">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+		  </div>	
+      </div>
+  </div>
+  </div>
+</div>
